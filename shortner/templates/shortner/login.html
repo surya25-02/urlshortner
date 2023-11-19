@@ -1,0 +1,49 @@
+{% extends "master.html" %}
+
+{% block title %}
+Login Page
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container" style="margin-top: 5rem;">
+    <div class="row row-cols-sm-1 justify-content-center">
+        <div class="col-11 col-sm-8 col-md-7 col-lg-4">
+            <div class="text-center">
+                <a class="text-white" href="/">URL SHORTNER</a> 
+            </div>
+            <div class="bg-white rounded p-4">
+                {%  if error %}
+                <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"
+                        style="color: #f00a0a;"></i> Invalid username or password, try again</div>
+                {% endif %}
+                <p class="login-box-msg text-center">Login to start your session</p>
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label class="form-label" for="loginusername">Username</label>
+                        <input class="form-control" type="text" name="username" id="loginusername" value="{{ username }}" required>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label" for="passwordgroup">Password</label>
+                        <div class="input-group" id="passwordgroup">
+                            <input type="password" class="form-control" name="password" value="{{ password }}"
+                            aria-label="text with button addon" aria-describedby="passwordshow" required>
+                            <button class="btn btn-light border-secondary-subtle" type="button" id="passwordshow" onclick="showpassword()">
+                                <i class="fa-solid fa-eye-slash" id="eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-3 d-grid rounded" style="background:rgb(13,23,33)">
+                        <button type="submit" class="btn text-white">Login</button>
+                    </div>
+                </form>
+                <div class="mt-3 text-center">
+                    Not Registered? <a href="{% url 'signup' %}" class="text-black fw-bold">Create an Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

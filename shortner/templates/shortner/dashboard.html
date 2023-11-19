@@ -1,0 +1,186 @@
+{% extends "master.html" %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+Dashboared
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg fixed-top" data-bs-theme="dark" id=navbar>
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="{% url 'home' %}" class="text-white">URL SHORTENER</a>
+        </div>
+        <button class="navbar-toggler" data-bs-toggle='collapse' data-bs-target="#navbarcontent"
+            aria-controls="navbarcontent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id='navbarcontent'>
+            <ul class="navbar-nav gap-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}"><i
+                            class="fa-solid fa-table-columns"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fa-solid fa-power-off"></i>
+                        Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="dashboard">
+    <section class="section-1"  style="background-color: #1d2a35;">
+        <div class="container-fuild container-lg">
+            <div class="d-flex gap-4 justify-content-between flex-column flex-md-row">
+                <div class="col bg-light py-2 px-3 rounded">
+                    <div class="row">
+                        <div class="col">
+                            <div class="fw-bold text-secondary">SHORT URL CREATED</div>
+                            <b>{{ page_obj.paginator.count }}</b>
+                        </div>
+                        <div class="col-auto m-auto">
+                            <img src="{% static 'shortner/img/icon-link.png' %}" alt=""
+                                style="width: 40px; height: 40px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col bg-light py-2 px-3 rounded">
+                    <div class="row">
+                        <div class="col">
+                            <div class="fw-bold text-secondary">MONTH VIEWS</div>
+                            <b>{{ Statistics.total_month_views }}</b>
+                        </div>
+                        <div class="col-auto m-auto">
+                            <img src="{% static 'shortner/img/icon-bar-graph.png' %}" alt=""
+                                style="width: 40px; height: 40px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col bg-white py-2 px-3 rounded">
+                    <div class="row">
+                        <div class="col">
+                            <div class="fw-bold text-secondary">TODAY VIEWS</div>
+                            <b>{{ Statistics.total_today_views }}</b>
+                        </div>
+                        <div class="col-auto m-auto">
+                            <img src="{% static 'shortner/img/icon-seen.png' %}" alt=""
+                                style="width: 40px; height: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row rounded bg-white mt-4 mx-0 pt-2 pb-4 px-2 px-md-3">
+                <div class="col-12 display-6">
+                    Create new short url
+                </div>
+                <div class="col mt-1">
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="url">
+                        <button class="btn cb" id="shorten">SHORT</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4"></div>
+        </div>
+    </section>
+    <section class="section-2"  style="background-color: #eff3f8">
+        <div class="container-fuild container-lg">
+            <div class="row justify-content-center mx-0 overflow-hidden">
+                <div class="col-auto">
+                    <img src="{% static 'shortner/img/best-url-shorteners-to-track-links.png' %}" alt="">
+                </div>
+            </div>
+            {% if object_list %}
+            <table class="table caption-top ">
+                <caption class="h3">Statistics</caption>
+                <thead style="--bs-table-bg: #6f69e0; --bs-table-color: #fff">
+                    <th scope="col">NO</th>
+                    <th scope="col">VIEWS</th>
+                    <th scope="col">SHORT URL</th>
+                    <th scope="col">ACTION</th>
+                </thead>
+                <tbody>
+                    {% for i in object_list %}
+                    <tr>
+                        <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+                        <td>{{ i.total_views }}</td>
+                        <td>
+                            <div class="d-none d-md-inline">https://{{ request.META.HTTP_HOST }}/</div>{{ i.short_code}}
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-light border-dark"
+                                    data-clipboard-target="https://{{ request.META.HTTP_HOST }}/{{ i.short_code }}" data-tippy-content="Copy"><i
+                                        class="fa-regular fa-copy"></i>
+                                </button>
+                                <button class="btn btn-danger" id="removebutton" value="{{ i.short_code }}"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'dashboard' %}?page=1" aria-label="First"><i
+                                        class="fa-solid fa-angle-double-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'dashboard' %}?page={{ page_obj.previous_page_number }}"
+                                    aria-label="Previous"><i class="fa-solid fa-angle-left"></i></a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link"><i class="fa-solid fa-angle-double-left"></i></a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link"><i class="fa-solid fa-angle-left"></i></a>
+                            </li>
+                            {% endif %}
+            
+                            {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                            <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                            {% elif i > page_obj.number|add:"-3" and i < page_obj.number|add:"3" %} <li class="page-item"><a
+                                    class="page-link" href="{% url 'dashboard' %}?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+            
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'dashboard' %}?page={{ page_obj.next_page_number }}"
+                                        aria-label="Next"><i class="fa-solid fa-angle-right"></i></a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="{% url 'dashboard' %}?page={{ page_obj.paginator.num_pages }}"
+                                        aria-label="Last"><i class="fa-solid fa-angle-double-right"></i></a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link"><i class="fa-solid fa-angle-right"></i></a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link"><i class="fa-solid fa-angle-double-right"></i></a>
+                                </li>
+                                {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+{% include "footer.html" %}
+
+{% endblock %}

@@ -1,0 +1,8 @@
+django
+drf-spectacular
+djangorestframework
+psycopg
+django-cors-headers
+whitenoise
+gunicorn
+apscheduler

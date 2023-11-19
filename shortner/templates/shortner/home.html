@@ -1,0 +1,125 @@
+{% extends "master.html" %}
+{% load static %}
+{% block title %}
+Home page
+{% endblock %}
+
+{% block content %}
+
+<header>
+    <nav class="navbar navbar-expand-lg fixed-top" data-bs-theme="dark" id="navbar">
+        <div class="container-fluid container-lg">
+            <a class="navbar-brand" href="{% url 'home'%}">URL SHORTNER</a>
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarcontent" aria-controls="navbarcontent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarcontent">
+                <div class="navbar-nav gap-3">
+                    <a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house"></i> Home</a>
+                    <a class="nav-link" href="{% url 'swagger-ui' %}"><i class="fa-solid fa-file"></i> API</a>
+                    {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'dashboard' %}"><i class="fa-solid fa-table-columns"></i>
+                        Dashboard</a>
+                    <a class="nav-link" href="logout"><i class="fa-solid fa-power-off"></i> Logout</a>
+                    {% else %}
+                    <a class="nav-link" href="signup"><i class="fa-solid fa-user-plus"></i> Signup</a>
+                    <a class="nav-link" href="login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fuild text-white" style="background: #1d2a35; padding: 125px 0;">
+        <div class="row justify-content-center mx-0">
+            <div class="col-auto">
+                <div style="width: fit-content">
+                    <div class="h2 d-none d-sm-block text-center">Short Urls with One Click</div>
+                    <div class="h3 d-sm-none text-center">Short Urls with One Click</div>
+                    <div class="input-group mt-4" id="change">
+                        <input type="text" class="form-control p-3 border-0" id="url" placeholder="your url here"
+                            style="box-shadow: none;" required>
+                        <button class="btn btn-light fw-bold" type="submit" id="shorten">Shorten</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <section>
+        <div class="container-fluid container-lg mt-5 text-center text-black">
+            <div class="row justify-content-center">
+                <h2 class="col-auto fw-light">HOW DO YOU <b>START</b>?</h2>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-3 justify-content-center justify-content-sm-evenly my-4 row-gap-5 px-3">
+                <div class="col-10">
+                    <div class="border border-2 border-dark rounded p-3">
+                        <div><img src="https://windowsreport.com/wp-content/uploads/2020/04/Login-Error.jpg" alt=""
+                                style="width: 150px; height: 100px;"></div>
+                        <h4 class="mt-4">CREATE AN ACCOUNT</h4>
+                        <div class="step-num mt-4"><span>1</span></div>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="border border-2 border-dark rounded p-3">
+                        <div class=""><img src="https://freedesignfile.com/upload/2018/01/Link-Icon.jpg" alt=""
+                                style="width: 100px; height: 100px;"></div>
+                        <h4 class="mt-4">SHORTEN YOUR LINK</h4>
+                        <div class="step-num mt-4"><span>2</span></div>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="border border-2 border-dark rounded p-3">
+                        <div class=""><img
+                                src="https://static.vecteezy.com/system/resources/previews/012/808/137/original/eps10-blue-copy-file-or-document-line-art-icon-isolated-on-white-background-paper-or-page-outline-symbol-in-a-simple-flat-trendy-modern-style-for-your-website-design-logo-and-mobile-app-vector.jpg"
+                                alt="" style="width: 100px; height: 100px;"></div>
+                        <h4 class="mt-4">COPY YOUR LINK</h4>
+                        <div class="step-num mt-4"><span>3</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container-fluid container-lg text-black text-center">
+            <div
+                class="row row-cols-1 row-cols-sm-3 justify-content-center justify-content-sm-evenly my-4 bg-light p-3">
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-like.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Easy</div>
+                    <div>ShortURL is easy and fast, enter the long link to get your shortened link</div>
+                </div>
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-url.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Shortened</div>
+                    <div>Use any link, no matter what size, ShortURL always shortens</div>
+                </div>
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-secure.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Secure</div>
+                    <div>ShortURL is easy and fast, enter the long link to get your shortened link</div>
+                </div>
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-unique.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Reliable</div>
+                    <div>All links that try to disseminate spam, viruses and malware are deleted</div>
+                </div>
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-responsive.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Devices</div>
+                    <div>Compatible with smartphones, tablets and desktop</div>
+                </div>
+                <div class="col">
+                    <div><img src="{% static 'shortner/img/icon-statistics.png' %}" alt=""></div>
+                    <div class="fw-bold text-body-secondary h4">Dashboard</div>
+                    <div>Check the number of clicks that your shortened URL received</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% include "footer.html" %}
+{% endblock %}
